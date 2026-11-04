@@ -165,6 +165,15 @@ test(git_grep_ref_is_not_an_option) :-
     assertion(sub_string(Text, _, _, _, "Invalid ref")),
     assertion(\+ exists_file(Marker)).
 
+test(git_show_commit_is_not_an_option) :-
+    tmp_file('mcp_written', Out),
+    format(string(Commit), "--output=~w", [Out]),
+    tool_call("git_show",
+              #{root:"_mcp_test_git_root", commit:Commit},
+              Text),
+    assertion(sub_string(Text, _, _, _, "git show failed")),
+    assertion(\+ exists_file(Out)).
+
 :- end_tests(git_injection).
 
 :- dynamic tmp_git_root_dir/1.
